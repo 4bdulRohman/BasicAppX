@@ -5,10 +5,12 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.DialogInterface;
 import android.os.Bundle;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.Spinner;
 
@@ -30,6 +32,44 @@ public class MainActivity extends AppCompatActivity {
         roundBox = (CheckBox) findViewById(R.id.chkRounded);
         formBox = (CheckBox) findViewById(R.id.chkFormula);
         imgView = (ImageView) findViewById(R.id.img);
+
+        unitType.setOnCheckedChangeListener(
+            new RadioGroup.OnCheckedChangeListener(){
+                @Override
+                public void onCheckedChanged(RadioGroup group, int checkedId) {
+                    RadioButton Selected = (RadioButton) findViewById(checkedId);
+                    ArrayAdapter<CharSequence> adapter;
+                    switch (Selected.getId()) {
+                        case R.id.rbTemp:
+                            adapter = ArrayAdapter.createFromResource(unitType.getContext(),
+                                    R.array.tempList, android.R.layout.simple_spinner_item);
+                            imgView.setImageResource(R.drawable.temperature);
+                            adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                            unitOri.setAdapter(adapter);
+                            unitConv.setAdapter(adapter);
+                            break;
+                        case R.id.rbDist:
+                            adapter = ArrayAdapter.createFromResource(unitType.getContext(),
+                                    R.array.distList, android.R.layout.simple_spinner_item);
+                            imgView.setImageResource(R.drawable.distance);
+                            adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                            unitOri.setAdapter(adapter);
+                            unitConv.setAdapter(adapter);
+                            break;
+                        case R.id.rbWeight:
+                            adapter = ArrayAdapter.createFromResource(unitType.getContext(),
+                                    R.array.weightList, android.R.layout.simple_spinner_item);
+                            imgView.setImageResource(R.drawable.weight);
+                            adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                            unitOri.setAdapter(adapter);
+                            unitConv.setAdapter(adapter);
+                            break;
+                    }
+                    inputTxt.setText("0");
+                    outputTxt.setText("0");
+                }
+            }
+        );
 
     }
 
@@ -78,5 +118,12 @@ public class MainActivity extends AppCompatActivity {
             DecimalFormat f2 = new DecimalFormat("#.#####");
             return f2.format(val);
         }
+    }
+
+    public void doConvert() {
+        RadioButton Selected = (RadioButton) findViewById(unitType.getCheckedRadioButtonId());
+        double val = Double.parseDouble(inputTxt.getText().toString());
+        double res = convertUnit(Selected.getText().toString(),unitOri.getSelectedItem().toString(),unitConv.getSelectedItem().toString(),val);
+        outputTxt.setText(strResult(res,roundBox.isChecked()));
     }
 }
