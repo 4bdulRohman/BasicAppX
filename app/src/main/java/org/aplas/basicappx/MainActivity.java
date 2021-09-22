@@ -35,6 +35,7 @@ public class MainActivity extends AppCompatActivity {
         roundBox = (CheckBox) findViewById(R.id.chkRounded);
         formBox = (CheckBox) findViewById(R.id.chkFormula);
         imgView = (ImageView) findViewById(R.id.img);
+        imgFormula = (ImageView) findViewById(R.id.imgFormula);
 
         unitType.setOnCheckedChangeListener(
             new RadioGroup.OnCheckedChangeListener(){
@@ -73,6 +74,17 @@ public class MainActivity extends AppCompatActivity {
                 }
             }
         );
+
+        formBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if (formBox.isChecked()) {
+                    imgFormula.setVisibility(View.VISIBLE);
+                }else{
+                    imgFormula.setVisibility(View.INVISIBLE);
+                }
+            }
+        });
 
         convertBtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -141,6 +153,7 @@ public class MainActivity extends AppCompatActivity {
     private CheckBox roundBox;
     private CheckBox formBox;
     private ImageView imgView;
+    private ImageView imgFormula;
 
     protected double convertUnit(String type, String oriUnit, String convUnit, double value){
         if(type.equals("Temperature")){
